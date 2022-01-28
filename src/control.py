@@ -25,6 +25,8 @@ class ClosedLoop:
             @param satLim is a list containing the upper and lower bounds of saturation      
         '''
         ## @brief Instantiates PID controller with gains
+        self.firstTime = 0
+        self.i = True
         self.PID = PID
         # PID Kp(*%/rad)Ki(*%/rad)Kd(*%s2/rad)
         ## @brief Instantiates duty saturation upper and lower bounds
@@ -42,7 +44,7 @@ class ClosedLoop:
         
         print("Controller Instantiated")
 
-    def update (self, Read, startTime, firstT):
+    def update (self, Read, startTime):
         ''' @brief Constructs a closed loop controller
             @details Sets PID and saturation limits to what is determined by task_hardware and instantiates error variables.
             @param PID is a list containing the three gain values for Kp/Ki/Kd
@@ -53,7 +55,10 @@ class ClosedLoop:
         e = self.setPoint - Read
         tcur = utime.ticks_ms()
         tdif = utime.ticks_diff(tcur,startTime)
-        self.times.append(tdif-firstT)
+        if self.i:
+            self.firstTime = tdif
+            self.i = False
+        self.times.append(tdif-self.firstTime)
         self.motorPositions.append(Read)
         #Updates sum of error (area under curve)
         # self.esum += (self.laste+e)*tdif/2
@@ -68,7 +73,7 @@ class ClosedLoop:
         # duty = self.PID[0]*(e) + self.PID[1]*(self.esum) + self.PID[2]*(dele) 
         duty = self.PID[0]*(e)
         #print(self.motorPositions)
-        return (self.sat(duty), e, tdif)
+        return (self.sat(duty), e)
                 
                 
     def get_Times(self):

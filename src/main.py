@@ -22,8 +22,7 @@ if __name__ == "__main__":
     last_error = 0
     new_error = 1
     startTime = utime.ticks_ms()
-    i = 0
-    firstT = 0 
+    #i = 0
     while True:
         try:
             if start:
@@ -32,10 +31,8 @@ if __name__ == "__main__":
             else:
                 #print(encoder.read())
                 encoder.update()
-                variables = controller.update(encoder.read(), startTime, firstT)
-                if i == 0:
-                    firstT = variables[3]
-                    i = 1
+                t_cur = utime.ticks_ms()
+                variables = controller.update(encoder.read(), startTime)
                 duty = variables[0]
                 last_error = new_error
                 new_error = variables[1]
@@ -46,6 +43,7 @@ if __name__ == "__main__":
                 last_error = 0
                 new_error = 1
                 start = True
+                controller.i = True
                 curTicks+=ticks_per_rev
                 controller.set_setPoint(curTicks)
                 for n in range(len(controller.times)):
