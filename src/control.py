@@ -73,7 +73,7 @@ class ClosedLoop:
         # duty = self.PID[0]*(e) + self.PID[1]*(self.esum) + self.PID[2]*(dele) 
         duty = self.PID[0]*(e)
         #print(self.motorPositions)
-        return (self.sat(duty), e)
+        return self.sat(duty)
                 
                 
     def get_Times(self):
