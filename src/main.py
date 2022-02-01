@@ -6,7 +6,6 @@ import motor_clephan_mcgrath
 
 if __name__ == "__main__":
     ticks_per_rev = 256*2*16
-    curTicks = ticks_per_rev
     
     start = True
     pinA10 = pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP)
@@ -22,7 +21,8 @@ if __name__ == "__main__":
         try:
             if start:
                 Kp = float(input('Input a proportional gain value and press enter: '))
-                controller = control.ClosedLoop([Kp,0,0], [-100,100], curTicks)
+                print('Start')
+                controller = control.ClosedLoop([Kp,0,0], [-100,100], ticks_per_rev)
                 startTime = utime.ticks_ms()
                 t_cur = utime.ticks_ms()
                 start = False
@@ -36,8 +36,7 @@ if __name__ == "__main__":
             if t_cur >= startTime+1000:
                 start = True
                 controller.i = True
-                curTicks+=ticks_per_rev
-                controller.set_setPoint(curTicks)
+                encoder.zero()
                 for n in range(len(controller.times)):
                     print("{:}, {:}".format(controller.times[n],controller.motorPositions[n]))
                 controller.times = []
@@ -46,9 +45,7 @@ if __name__ == "__main__":
                 print('Stop')
         except KeyboardInterrupt:
             break
-
-#     print(controller.times)
-#     print(controller.motorPositions)
+        
     motor.set_duty_cycle(0)
     print("\nProgram ending")
     
