@@ -42,6 +42,8 @@ if __name__ == "__main__":
                     print("{:}, {:}".format(controller.times[n],controller.motorPositions[n]))
                 controller.times = []
                 startTime = utime.ticks_ms()
+                motor.set_duty_cycle(0)
+                print('Stop')
         except KeyboardInterrupt:
             break
 
