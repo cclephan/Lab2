@@ -50,7 +50,7 @@ class Encoder:
         @brief              Updates encoder position and delta
         '''
         
-        self.position = self.get_position() + self.get_delta()
+        self.position = self.read() + self.get_delta()
         self.Eposition = self.timX.counter()
         
         

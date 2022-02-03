@@ -38,17 +38,17 @@ class MotorDriver:
         '''
         if duty >= 0:
             if duty <= 100:
-                self.t2c1.pulse_width_percent(100)
-                self.t2c2.pulse_width_percent(100-duty)
+                self.ch2.pulse_width_percent(100)
+                self.ch1.pulse_width_percent(100-duty)
             else:
-                self.t2c1.pulse_width_percent(100)
-                self.t2c2.pulse_width_percent(0)
+                self.ch2.pulse_width_percent(100)
+                self.ch1.pulse_width_percent(0)
         #if duty is negative then set the second channel to a specified duty (negative sign will make duty positive) and other to 0.
         elif duty < 0:
             if duty >= -100:
-                self.t2c2.pulse_width_percent(100)
-                self.t2c1.pulse_width_percent(100+duty)
+                self.ch1.pulse_width_percent(100)
+                self.ch2.pulse_width_percent(100+duty)
             else:
-                self.t2c2.pulse_width_percent(100)
-                self.t2c1.pulse_width_percent(0)
+                self.ch1.pulse_width_percent(100)
+                self.ch2.pulse_width_percent(0)
         
