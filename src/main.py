@@ -1,3 +1,12 @@
+"""!
+@file main.py
+The main file that will create an Encoder Class and a Motor Driver 
+@author Christian Clephan
+@author Kyle McGrath
+@date   02-Jan-2022
+@copyright (c) 2022 released under CalPoly
+"""
+
 import pyb
 import control
 import utime
@@ -20,9 +29,10 @@ if __name__ == "__main__":
     while True:
         try:
             if start:
+                encoder.zero()
                 Kp = float(input('Input a proportional gain value and press enter: '))
                 print('Start')
-                controller = control.ClosedLoop([Kp,0,0], [-100,100], ticks_per_rev)
+                controller = control.ClosedLoop([Kp,0,0], [-1000,1000], ticks_per_rev)
                 startTime = utime.ticks_ms()
                 t_cur = utime.ticks_ms()
                 start = False
@@ -33,15 +43,16 @@ if __name__ == "__main__":
                 duty = controller.update(encoder.read(), startTime)
                 motor.set_duty_cycle(duty)
                 utime.sleep_ms(10)
-            if t_cur >= startTime+1000:
+            if t_cur >= startTime+2000:
+                #motor.set_duty_cycle(0)
                 start = True
                 controller.i = True
-                encoder.zero()
                 for n in range(len(controller.times)):
                     print("{:}, {:}".format(controller.times[n],controller.motorPositions[n]))
                 controller.times = []
+                controller.motorPositions = []
                 startTime = utime.ticks_ms()
-                motor.set_duty_cycle(0)
+                encoder.zero()
                 print('Stop')
         except KeyboardInterrupt:
             break
