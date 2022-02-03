@@ -20,7 +20,8 @@ class ClosedLoop:
     def __init__ (self,PID, satLim, setPoint):
         '''!
         @brief Constructs a closed loop controller
-        @details Sets PID and saturation limits to what is determined by task_hardware and instantiates error variables.
+        @details Creates variables necessary to instantiate a controller such as timing, PID gains, saturation
+        limit, setpoint value, error, and arrays used in recording a step response
         @param PID is a list containing the three gain values for Kp/Ki/Kd
         @param satLim is a list containing the upper and lower bounds of saturation      
         '''
@@ -46,10 +47,9 @@ class ClosedLoop:
 
     def update (self, Read, startTime):
         '''!
-        @brief Constructs a closed loop controller
-        @details Sets PID and saturation limits to what is determined by task_hardware and instantiates error variables.
-        @param PID is a list containing the three gain values for Kp/Ki/Kd
-        @param satLim is a list containing the upper and lower bounds of saturation    
+        @brief Updates the controller for timing and error between a read value and the setpoint
+        @param Read is the value returned by the sensor detecting the current state of the system (encoder position)
+        @param startTime is the initial time for a step response.    
         @return Sends back saturated duty value using sat method.
         '''
         ## @brief Error signal which is the difference between a reference and input (current) value.
@@ -79,9 +79,17 @@ class ClosedLoop:
                 
                 
     def get_Times(self):
+        '''!
+        @brief Returns time array for a step response
+        @return Contains array of time over a step response
+        '''
         return self.times
     
     def getPositions(self):
+        '''!
+        @brief Returns motor positions array for a step response
+        @return Contains encoder read positions of a motor over a step response
+        '''
         return self.motorPositions
     
     def get_PID(self):
@@ -101,14 +109,16 @@ class ClosedLoop:
         
     def set_setPoint(self,setPoint):
         '''!
+        @brief Sets or resets setpoint to a certain value
         '''
         self.setPoint = setPoint
         
     def sat(self,sat_duty):
-        ''' @brief Saturation functionallity
-            @details Controls if a duty is too large from what is calculated in update method.
-            @param sat_duty is the value sent by what is calculated in update method.
-            @return Sends back either the saturated limit if duty is too high or original duty based on bounds.
+        '''!
+        @brief Saturation functionallity
+        @details Controls if a duty is too large from what is calculated in update method.
+        @param sat_duty is the value sent by what is calculated in update method.
+        @return Sends back either the saturated limit if duty is too high or original duty based on bounds.
         '''
         if sat_duty<self.satLim[0]:
             return self.satLim[0]

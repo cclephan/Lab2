@@ -19,16 +19,18 @@ Kp = input('Enter a Kp value: ')
 b = bytes(Kp,'utf-8')+b'\r\n'
 
 with serial.Serial ('COM4', 115200) as s_port:
-    s_port.write (b)   # Write bytes, not a string
+    #Sends Kp value to Nucleo for main.py Kp input
+    s_port.write (b)
     line = s_port.readline()
     time = []
-    space = []
+    position = []
+    #Reads through lines of main.py from Nucleo until it finds Stop
     while not b'Stop' in line:
         try:
             temp = line.split (b',')
-            #print(temp)
+            #Appends to time and position lists
             time.append(float(temp[0]))
-            space.append(float(temp[1]))
+            position.append(float(temp[1]))
         except IndexError as error:
             print(error, line)
             #print(line)
@@ -39,15 +41,13 @@ with serial.Serial ('COM4', 115200) as s_port:
             line = s_port.readline()
     if time[0] != 0:
         time.pop(0)
-    print(time) 
-    print(space)
-    pyplot.plot(time, space)
+    #Plots information collected in step response
+    pyplot.plot(time, position)
     pyplot.xlabel('Time (ms)')
     pyplot.ylabel('Position (ticks)')
     pyplot.title('Step Impulse at Kp='+Kp)
     pyplot.grid(True)
     pyplot.show()
-    #print('Working')
     time = []
-    space = []
+    position = []
     
