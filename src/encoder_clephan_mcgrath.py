@@ -27,7 +27,7 @@ class Encoder:
         
         '''
 
-        ## @brief Configures Nucleo timer at some parameter timerNum, and
+        ## Configures Nucleo timer at some parameter timerNum, and
         self.timX = pyb.Timer(timerNum, prescaler=0, period=Encoder_Period-1)
         
         ## Configures relationship between timer and encoder B pin
@@ -53,9 +53,6 @@ class Encoder:
         self.position = self.get_position() + self.get_delta()
         self.Eposition = self.timX.counter()
         
-        
-        #print('Reading encoder count and updating position and delta values')
-        #print(self.position)
         
     def read(self):
 
@@ -91,19 +88,3 @@ class Encoder:
         return delp
     
 
-
-# if __name__ == "__main__":
-#     motor = motor_clephan_mcgrath.MotorDriver(pyb.Pin(pyb.Pin.board.PA10, pyb.Pin.OUT_PP),pyb.Pin(pyb.Pin.board.PB4),pyb.Pin(pyb.Pin.board.PB5), 3)
-#     motor.set_duty_cycle(40)
-    # pinC6 = pyb.Pin(pyb.Pin.board.PC6)
-    # pinC7 = pyb.Pin(pyb.Pin.board.PC7)
-    # encoder = Encoder(pinC6,pinC7,8)
-#     while True:
-#         try:
-#             encoder.update()
-#             print(encoder.get_position())
-#             
-#         except KeyboardInterrupt():
-#             break
-#     print('Program End')
-#    

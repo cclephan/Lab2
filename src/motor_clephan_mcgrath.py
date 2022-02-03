@@ -1,5 +1,12 @@
+"""!
+@file motor_clephan_mcgrath.py
+This file contains the MotorDriver Class
+@author Christian Clephan
+@author Kyle McGrath
+@date   02-Jan-2022
+@copyright (c) 2022 released under CalPoly
+"""
 import pyb
-import time
 
 class MotorDriver:
     '''! 
